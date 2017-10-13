@@ -49,11 +49,11 @@ class Usuario
         $this->option_value = $option_value;
     }
 
-    public function loadById()
+    public function loadById($id)
     {
         $sql = new Sql();
-        $resultado = $sql->select("select * from wp_options where option_id = :id", array(
-            ":id"=>$id
+        $resultado = $sql->select("select * from wp_options where option_id = :ID", array(
+            ":ID"=>$id
         ));
         if(count($resultado) > 0)
         {
@@ -64,6 +64,40 @@ class Usuario
             $this->setOptionValue($row['option_value']);
         }
     }
+    public static function todosUsuarios()
+    {
+        $sql = new Sql();
+        return $sql->select("select * from wp_options");
+
+    }
+    public static function buscarUsuario($estudante)
+    {
+        $sql = new Sql();
+        return $sql->select("select * from wp_options where option_name like :nome", array(
+            ":nome"=>"%".$estudante."%"
+        ));
+    }
+    public function login($usr, $pass)
+    {
+        $sql = new Sql();
+        $resultado = $sql->select("select * from wp_options where option_name = :usr and option_value = :pass ", array(
+            ":usr"=>$usr,
+            ":pass"=>$pass
+        ));
+        if(count($resultado) > 0)
+        {
+            $row = $resultado[0];
+            $this->setAutoload($row['autoload']);
+            $this->setOptionId($row['option_id']);
+            $this->setOptionName($row['option_name']);
+            $this->setOptionValue($row['option_value']);
+        }
+        else
+        {
+            throw new Exception("usuario não encontrado");
+        }
+    }
+
     public function  __toString()
     {
         return json_encode(array(
