@@ -57,11 +57,7 @@ class Usuario
         ));
         if(count($resultado) > 0)
         {
-            $row = $resultado[0];
-            $this->setAutoload($row['autoload']);
-            $this->setOptionId($row['option_id']);
-            $this->setOptionName($row['option_name']);
-            $this->setOptionValue($row['option_value']);
+            $this->setDados($resultado[0]);
         }
     }
     public static function todosUsuarios()
@@ -86,16 +82,47 @@ class Usuario
         ));
         if(count($resultado) > 0)
         {
-            $row = $resultado[0];
-            $this->setAutoload($row['autoload']);
-            $this->setOptionId($row['option_id']);
-            $this->setOptionName($row['option_name']);
-            $this->setOptionValue($row['option_value']);
+            $this->setDados($resultado[0]);
+
         }
         else
         {
             throw new Exception("usuario não encontrado");
         }
+    }
+
+    public function setDados($dados)
+    {
+        $this->setAutoload($dados['autoload']);
+        $this->setOptionId($dados['option_id']);
+        $this->setOptionName($dados['option_name']);
+        $this->setOptionValue($dados['option_value']);
+    }
+
+    public function insert(){
+        $sql = new Sql();
+        $resultado = $sql->select("CALL estudantes(:NAM, :pass)", array(
+            ":NAM"=>$this->getOptionName(),
+            ":pass"=>$this->getOptionValue()
+        ));
+        if( count($resultado) > 0 )
+        {
+            $this->setDados($resultado[0]);
+        }
+
+    }
+
+    public function update($login, $senha, $id)
+    {
+        $this->setOptionName($login);
+        $this->setOptionValue($senha);
+        $this->setOptionId($id);
+        $sql = new Sql();
+        $sql->query("update set option_name =:nome, option_value = :senha where option_id = :id", array(
+            ":nome"=>$this->getOptionName(),
+            ":senha"=>$this->getOptionValue(),
+            ":id"=>$this->getOptionId()
+        ));
     }
 
     public function  __toString()

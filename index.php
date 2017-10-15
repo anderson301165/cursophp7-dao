@@ -6,16 +6,24 @@
  * Time: 18:27
  */
 require_once("config.php");
-/* retorna uma unica linha da tabela
+// retorna uma unica linha da tabela
 $usuario = new Usuario();
 $usuario->loadById(3);
 echo($usuario);
-*/
+
 /* retorna todos os dados
 $listadados = Usuario::todosUsuarios();
 var_dump($listadados);
-*/
 
+
+/*
 $usuario = new Usuario();
 $usuario->login("blogname", "Cliejjnte");
 echo($usuario);
+
+
+$aluno = new Usuario();
+$aluno->setOptionName("testesqsq");
+$aluno->setOptionValue("3033131");
+$aluno->insert();
+echo($aluno);*/
