@@ -118,11 +118,23 @@ class Usuario
         $this->setOptionValue($senha);
         $this->setOptionId($id);
         $sql = new Sql();
-        $sql->query("update set option_name =:nome, option_value = :senha where option_id = :id", array(
+        $sql->query("update wp_options set option_name =:nome, option_value = :senha where option_id = :id", array(
             ":nome"=>$this->getOptionName(),
             ":senha"=>$this->getOptionValue(),
             ":id"=>$this->getOptionId()
         ));
+    }
+
+    public function delete()
+    {
+        $sql = new Sql();
+        $sql->query("delete from wp_options where option_id = :id",array(
+            ":id"=>$this->getOptionId()
+        ));
+        $this->setOptionId(0);
+        $this->setOptionValue("");
+        $this->setOptionName("");
+        $this->setAutoload("");
     }
 
     public function  __toString()
